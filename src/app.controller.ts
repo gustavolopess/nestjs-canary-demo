@@ -20,4 +20,9 @@ export class AppController {
 
     return this.appService.getVersion();
   }
+
+  @Get('health')
+  async healthCheck(): Promise<string> {
+    return 'Service is up and running!'
+  }
 }
