@@ -12,12 +12,8 @@ jobs:
       - name: Login to registry
         run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
       
-      - name: Get version
-        id: vars
-        run: echo ::set-output name=tag::$(echo ${{ github.sha }})
-      
       - name: Build and tag docker image
-        run: docker build . --tag gustavolopess/nestjs-canary-demo:${{steps.vars.outputs.tag}}
+        run: docker build . --tag gustavolopess/nestjs-canary-demo:${{ github.sha }}
 
       - name: Push image to docker hub 
-        run: docker push gustavolopess/nestjs-canary-demo:${{steps.vars.outputs.tag}}
+        run: docker push gustavolopess/nestjs-canary-demo:${{ github.sha }}
