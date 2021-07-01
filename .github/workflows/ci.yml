@@ -17,7 +17,7 @@ jobs:
         run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
       
       - name: Build and tag docker image
-        run: docker build . -t gustavolopess/nestjs-canary-demo:${{steps.vars.output.tag}}
+        run: docker build . --tag gustavolopess/nestjs-canary-demo:${{steps.vars.output.tag}}
 
       - name: Push image to docker hub 
         run: docker push gustavolopess/nestjs-canary-demo:${{steps.vars.output.tag}}
