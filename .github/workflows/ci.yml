@@ -1,0 +1,23 @@
+name: CI
+
+on: workflow_dispatch
+
+jobs:
+  build-and-push-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v2
+
+      - name: Login to registry
+        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      
+      - name: Get version
+        id: vars
+        run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
+      
+      - name: Build and tag docker image
+        run: docker build . -t gustavolopess/nestjs-canary-demo:${{steps.vars.output.tag}}
+
+      - name: Push image to docker hub 
+        run: docker push gustavolopess/nestjs-canary-demo:${{steps.vars.output.tag}}
