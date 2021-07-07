@@ -40,4 +40,8 @@ jobs:
           pip install -r requirements.txt
       
       - name: generate deployment JSON
+        env:
+          CLUSTER_HOST: ${{ secrets.CLUSTER_HOST }}
+          SERVICEACCOUNT_TOKEN: ${{ secrets.SERVICEACCOUNT_TOKEN }}
+          NAMESPACE_SERVICEACCOUNT: ${{ secrets.NAMESPACE_SERVICEACCOUNT }}
         run: python deployment_generator.py nestjs-canary-demo nestjs-canary-demo gustavolopess/nestjs-canary-demo ${{ github.sha }}
