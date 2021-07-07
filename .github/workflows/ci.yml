@@ -47,4 +47,8 @@ jobs:
         run: python deployment_generator.py nestjs-canary-demo nestjs-canary-demo gustavolopess/nestjs-canary-demo ${{ github.sha }}
 
       - name: check canary status
+        env:
+          CLUSTER_HOST: ${{ secrets.CLUSTER_HOST }}
+          SERVICEACCOUNT_TOKEN: ${{ secrets.SERVICEACCOUNT_TOKEN }}
+          NAMESPACE_SERVICEACCOUNT: ${{ secrets.NAMESPACE_SERVICEACCOUNT }}
         run: python3 canary_monitor.py ${{ secrets.APPLICATION_URL }}/error/0 
