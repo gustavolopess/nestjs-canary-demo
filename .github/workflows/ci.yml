@@ -19,6 +19,7 @@ jobs:
         run: docker push gustavolopess/nestjs-canary-demo:${{ github.sha }}
 
   generate-deployment:
+    needs: build-and-push-docker-image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout deployer repository
