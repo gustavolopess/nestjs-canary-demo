@@ -5,6 +5,11 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @Get('version')
+  getVersion(): string {
+    return this.appService.getVersion();
+  }
+
   @Get('error/:prob')
   randomError(@Param('prob') errorProbability: number): string {
     if (Math.random() > errorProbability / 100) {
