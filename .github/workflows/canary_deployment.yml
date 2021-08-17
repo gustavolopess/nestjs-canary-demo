@@ -15,12 +15,12 @@ jobs:
 
       - name: Login to registry
         run: | 
-          echo ${{ secrets.DOCKERHUB_PASSWORD }} | 
+          echo ${{ secrets.DOCKERHUB_PASSWORD }} | \
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin 
 
       - name: Build and tag docker image
         run: |
-          docker build . --tag 
+          docker build . --tag \
           gustavolopess/nestjs-canary-demo:${{ github.sha }}
 
       - name: Push image to docker hub 
@@ -54,7 +54,5 @@ jobs:
           NAMESPACE_SERVICEACCOUNT: ${{ secrets.NAMESPACE_SERVICEACCOUNT }}
           APPLICATION_URL: ${{ secrets.APPLICATION_URL }} 
         run: |
-          python deployment_generator.py \
-          nestjs-canary-demo nestjs-canary-demo \ 
-          gustavolopess/nestjs-canary-demo ${{ github.sha }} \
+          python deployment_generator.py nestjs-canary-demo nestjs-canary-demo gustavolopess/nestjs-canary-demo ${{ github.sha }} \
           && python3 canary_monitor.py 
