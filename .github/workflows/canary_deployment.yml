@@ -47,12 +47,20 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       
-      - name: Create and analyze new canary
+      - name: Create new deployment
         env:
-          CLUSTER_HOST: ${{ secrets.CLUSTER_HOST }}
+          CLUSTER_HOST: https://ec2-3-80-38-40.compute-1.amazonaws.com:8443
           SERVICEACCOUNT_TOKEN: ${{ secrets.SERVICEACCOUNT_TOKEN }}
           NAMESPACE_SERVICEACCOUNT: ${{ secrets.NAMESPACE_SERVICEACCOUNT }}
-          APPLICATION_URL: ${{ secrets.APPLICATION_URL }} 
+          APPLICATION_URL: http://ec2-3-80-38-40.compute-1.amazonaws.com:8080/error/0 # 0% of failure 
         run: |
-          python deployment_generator.py nestjs-canary-demo nestjs-canary-demo gustavolopess/nestjs-canary-demo ${{ github.sha }} \
-          && python3 canary_monitor.py 
+          python deployment_generator.py nestjs-canary-demo nestjs-canary-demo gustavolopess/nestjs-canary-demo ${{ github.sha }}
+
+      - name: Analyze new canary
+        env:
+          CLUSTER_HOST: https://ec2-3-80-38-40.compute-1.amazonaws.com:8443
+          SERVICEACCOUNT_TOKEN: ${{ secrets.SERVICEACCOUNT_TOKEN }}
+          NAMESPACE_SERVICEACCOUNT: ${{ secrets.NAMESPACE_SERVICEACCOUNT }}
+          APPLICATION_URL: http://ec2-3-80-38-40.compute-1.amazonaws.com:8080/error/0 # 0% of failure 
+        run: |
+          python3 canary_monitor.py 
