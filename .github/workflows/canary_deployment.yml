@@ -69,6 +69,13 @@ jobs:
           CLUSTER_HOST: https://ec2-3-80-38-40.compute-1.amazonaws.com:8443
           SERVICEACCOUNT_TOKEN: ${{ secrets.SERVICEACCOUNT_TOKEN }}
           NAMESPACE_SERVICEACCOUNT: ${{ secrets.NAMESPACE_SERVICEACCOUNT }}
-          APPLICATION_URL: http://ec2-3-80-38-40.compute-1.amazonaws.com:8080/${{ github.event.inputs.metric_type }}/${{ github.event.inputs.amount }} # 0% of failure 
+          METRIC_TYPE: ${{ github.event.inputs.metric_type }}
+          AMOUNT: ${{ github.event.inputs.amount }}
+        shell: bash
         run: |
-          python3 canary_monitor.py 
+          if [ "$METRIC_TYPE" == "" ] && [ "$AMOUNT" == "" ]; then
+            APPLICATION_URL="http://ec2-3-80-38-40.compute-1.amazonaws.com:8080/error/0" python3 canary_monitor.py 
+          else
+            APPLICATION_URL="http://ec2-3-80-38-40.compute-1.amazonaws.com:8080/$METRIC_TYPE/$AMOUNT" python3 canary_monitor.py
+          fi
+          
