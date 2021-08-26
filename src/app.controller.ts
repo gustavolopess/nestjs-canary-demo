@@ -28,6 +28,6 @@ export class AppController {
 
   @Get('health')
   async healthCheck(): Promise<string> {
-    return 'Service is up and running!'
+    return 'Service is up and running! :)'
   }
 }
